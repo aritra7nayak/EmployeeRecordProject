@@ -1,0 +1,75 @@
+﻿@model EmployeeRecordProject.Models.Employee
+
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+<fieldset>
+    <legend>Edit Employee Information</legend>
+    @Html.HiddenFor(model=>model.UploadedPhoto)
+    @Html.HiddenFor(model=>model.DateOfBirth)
+    @Html.HiddenFor(model => model.Age)
+    <div class="editor-label">
+        @Html.LabelFor(model => model.FirstName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.FirstName)
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.MiddleName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.MiddleName)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.LastName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.LastName)
+        @Html.ValidationMessageFor(model => model.LastName)
+    </div>
+
+   
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Gender)
+    </div>
+    <div class="editor-field">
+        @Html.EnumDropDownListFor(model => model.Gender)
+        @Html.ValidationMessageFor(model => model.Gender)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.PhoneNo)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.PhoneNo)
+        @Html.ValidationMessageFor(model => model.PhoneNo)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.EmailId)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.EmailId)
+        @Html.ValidationMessageFor(model => model.EmailId)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.UploadedPhoto, "Profile Image")
+    </div>
+    <div class="editor-field">
+        <input type="file" name="imageFile" />
+        @Html.ValidationMessageFor(model => model.UploadedPhoto)
+    </div>
+
+    <p>
+        <input type="submit" value="Save" />
+    </p>
+</fieldset>
+}
+
+

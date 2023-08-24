@@ -1,0 +1,73 @@
+﻿@model EmployeeRecordProject.Models.Employee
+
+@{
+    ViewBag.Title = "Delete";
+    var employee = ViewBag.Employee as EmployeeRecordProject.Models.Employee;
+    var educations = ViewBag.Educations as List<EmployeeRecordProject.Models.EmployeeEducation>;
+}
+
+<h2>Delete Employee</h2>
+
+<div>
+    <h4>Employee Information</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.FirstName)</dt>
+        <dd>@Html.DisplayFor(model => model.FirstName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.MiddleName)</dt>
+        <dd>@Html.DisplayFor(model => model.MiddleName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.LastName)</dt>
+        <dd>@Html.DisplayFor(model => model.LastName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.DateOfBirth)</dt>
+        <dd>@Html.DisplayFor(model => model.DateOfBirth)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.PhoneNo)</dt>
+        <dd>@Html.DisplayFor(model => model.PhoneNo)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.Gender)</dt>
+        <dd>@Html.DisplayFor(model => model.Gender)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.EmailId)</dt>
+        <dd>@Html.DisplayFor(model => model.EmailId)</dd>
+
+        <dt>@Html.DisplayNameFor(model => model.UploadedPhoto)</dt>
+        <dd>@Html.DisplayFor(model => model.UploadedPhoto)</dd>
+    </dl>
+</div>
+
+<div>
+    <h4>Education Records</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Degree</th>
+                <th>Passing Year</th>
+                <th>Degree Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var education in educations)
+            {
+                <tr>
+                    <td>@education.Degree</td>
+                    <td>@education.PassingYear</td>
+                    <td>@education.DegreePercentage</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}

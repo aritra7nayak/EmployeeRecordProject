@@ -1,0 +1,31 @@
+﻿@model EmployeeRecordProject.Models.EmployeeEducation
+
+<div class="education-item">
+    @Html.HiddenFor(model => model.EmployeeId)
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Degree)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Degree, new { htmlAttributes = new { @class = "Degree" } })
+        @Html.ValidationMessageFor(model => model.Degree)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.PassingYear)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.PassingYear, new { htmlAttributes = new { @class = "PassingYear" } })
+        @Html.ValidationMessageFor(model => model.PassingYear)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.DegreePercentage)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.DegreePercentage, new { htmlAttributes = new { @class = "DegreePercentage" } })
+        @Html.ValidationMessageFor(model => model.DegreePercentage)
+    </div>
+
+    <button type="button" class="remove-education">Remove Education</button>
+
+</div>

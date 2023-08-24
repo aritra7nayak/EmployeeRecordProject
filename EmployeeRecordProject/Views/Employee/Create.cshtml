@@ -1,0 +1,185 @@
+﻿@model EmployeeRecordProject.Models.Employee
+
+
+<style>
+    .required-label::after {
+        content: " *";
+        color: red;
+    }
+</style>
+@using (Html.BeginForm("Create", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+<fieldset>
+    <legend>Employee Information</legend>
+
+    <div class="editor-label required-label">
+        @Html.LabelFor(model => model.FirstName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.FirstName)
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.MiddleName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.MiddleName)
+    </div>
+
+    <div class="editor-label required-label">
+        @Html.LabelFor(model => model.LastName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.LastName)
+        @Html.ValidationMessageFor(model => model.LastName)
+    </div>
+
+    <div class="editor-label required-label">
+        @Html.LabelFor(model => model.DateOfBirth)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.DateOfBirth, new { htmlAttributes = new { @class = "datepicker" } })
+        @Html.ValidationMessageFor(model => model.DateOfBirth)
+    </div>
+    <div class="editor-label">
+        @Html.Label("Age")
+    </div>
+    <div class="editor-field">
+        <span id="calculatedAge"></span>
+    </div>
+    <div class="editor-label required-label">
+        @Html.LabelFor(model => model.Gender)
+    </div>
+    <div class="editor-field">
+        @Html.EnumDropDownListFor(model => model.Gender)
+        @Html.ValidationMessageFor(model => model.Gender)
+    </div>
+    <div class="editor-label required-label">
+        @Html.LabelFor(model => model.PhoneNo)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.PhoneNo)
+        @Html.ValidationMessageFor(model => model.PhoneNo)
+    </div>
+
+    <div class="editor-label required-label">
+        @Html.LabelFor(model => model.EmailId)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.EmailId)
+        @Html.ValidationMessageFor(model => model.EmailId)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.UploadedPhoto, "Profile Image")
+    </div>
+    <div class="editor-field">
+        <input type="file" name="imageFile" />
+        @Html.ValidationMessageFor(model => model.UploadedPhoto)
+    </div>
+
+    <h2>Add Education</h2>
+    <div id="education-container">
+        @Html.Partial("Education", new EmployeeRecordProject.Models.EmployeeEducation())
+    </div>
+    <button type="button" id="add-education">Add Another Education</button>
+
+    <div id="education-data-container">
+        <input type="hidden" name="educations" value="@ViewBag.Educations" />
+    </div>
+
+
+    <p>
+        <input type="submit" value="Create" />
+    </p>
+</fieldset>
+}
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            var educationContainer = $("#education-container");
+            var educationDataContainer = $("#education-data-container");
+
+            $("#add-education").on("click", function () {
+                $.get('@Url.Action("Education", "Employee")', function (template) {
+                    educationContainer.append(template);
+                });
+            });
+
+            educationContainer.on("click", ".remove-education", function () {
+                $(this).closest(".education-item").remove();
+            });
+
+            $("form").submit(function () {
+                var educations = [];
+
+                educationContainer.find(".education-item").each(function () {
+                    var education = {
+                        Degree: $(this).find(".Degree").val(),
+                        PassingYear: parseInt($(this).find(".PassingYear").val()),
+                        DegreePercentage: parseFloat($(this).find(".DegreePercentage").val())
+                    };
+                    educations.push(education);
+                });
+
+                educationDataContainer.empty();
+
+                $.each(educations, function (index, education) {
+                    var inputNamePrefix = "educations[" + index + "].";
+                    educationDataContainer.append(
+                        $("<input>").attr("type", "hidden").attr("name", inputNamePrefix + "Degree").val(education.Degree),
+                        $("<input>").attr("type", "hidden").attr("name", inputNamePrefix + "PassingYear").val(education.PassingYear),
+                        $("<input>").attr("type", "hidden").attr("name", inputNamePrefix + "DegreePercentage").val(education.DegreePercentage)
+                    );
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#DateOfBirth").on("change", function () {
+                var dob = new Date($(this).val());
+                var today = new Date();
+                var age = today.getFullYear() - dob.getFullYear();
+                if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+                    age--;
+                }
+                $("#calculatedAge").text(age);
+            });
+        });
+
+        $(document).ready(function () {
+            $("#DateOfBirth").on("change", function () {
+                var selectedDate = new Date($(this).val());
+                var currentDate = new Date();
+
+                // Calculate age
+                var age = currentDate.getFullYear() - selectedDate.getFullYear();
+                if (currentDate.getMonth() < selectedDate.getMonth() ||
+                    (currentDate.getMonth() === selectedDate.getMonth() && currentDate.getDate() < selectedDate.getDate())) {
+                    age--;
+                }
+
+                // Update age display
+                $("#calculatedAge").text(age);
+
+                // Check for valid age
+                if (age < 18) {
+                    $(this).val(""); // Clear the invalid date
+                    alert("Age must be at least 18 years.");
+                }
+            });
+        });
+    </script>
+}
+
