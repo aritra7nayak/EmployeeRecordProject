@@ -59,7 +59,6 @@ namespace EmployeeRecordProject.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Repopulate the education section if needed
 
             return View(employee);
         }
@@ -146,7 +145,7 @@ namespace EmployeeRecordProject.Controllers
 
         public ActionResult EducationDetails(int id)
         {
-            EmployeeEducation education = _educationRepository.GetEducationById(id); // Replace with your actual repository method
+            EmployeeEducation education = _educationRepository.GetEducationById(id); 
             if (education == null)
             {
                 return HttpNotFound();
